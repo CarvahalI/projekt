@@ -1,29 +1,37 @@
-name: Budowanie pliku .exe
+name: Build and Upload Executable
 
 on:
-  schedule:
-    - cron: "0 0 * * 0"  # Uruchamianie automatycznie raz w tygodniu w niedzielę o północy
   push:
     branches:
-      - master
+      - main
+  schedule:
+    - cron: "0 0 * * 0"  # Uruchamia raz w tygodniu w niedzielę o północy
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
-    
+
     steps:
-      - name: Checkout kodu
-        uses: actions/checkout@v2
-      
-      - name: Konfiguracja i instalacja potrzebnych komponentów
-        run: bash installResources.sh
-      
-      - name: Budowanie pliku .exe
-        run: pyinstaller --onefile program.py
-      
-      - name: Przesłanie pliku .exe do repozytorium
-        uses: actions/upload-artifact@v3
-        with:
-          name: program-exe
-          path: dist/program.exe
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Wybierz odpowiednią wersję Pythona
+
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Install resources
+      run: |
+        chmod +x installResources.sh
+        ./installResources.sh
+
+    - name: Build executable
+      run: |
+        pyinstaller --onefile program.py
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: program-exe
+        path: ./dist/program.exe
