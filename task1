@@ -1,0 +1,40 @@
+# Task1: parsowanie argumentów przekazywanych przy uruchomieniu programu
+import sys
+
+def parse_arguments():
+    if len(sys.argv) < 3:
+        print("Usage: program.py input_file output_file")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+    return input_file, output_file
+# Główna funkcja programu
+def convert_data(input_file_path, output_file_path):
+    file_extension = input_file_path.split('.')[-1].lower()
+
+    if file_extension == 'json':
+       
+        data = parse_json(input_file_path)
+        
+        save_json(output_file_path, data)
+    elif file_extension in ['yml', 'yaml']:
+        
+        data = parse_yaml(input_file_path)
+       
+        save_yaml(output_file_path, data)
+    elif file_extension == 'xml':
+       
+        root = parse_xml(input_file_path)
+        
+        save_xml(output_file_path, root)
+    else:
+        print(f"Unsupported file format: {file_extension}")
+        return
+
+    print(f"Data converted successfully. Saved to {output_file_path}")
+
+
+if __name__ == '__main__':
+    input_file, output_file = parse_arguments()
+    convert_data(input_file, output_file)
