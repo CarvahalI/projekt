@@ -1,0 +1,4 @@
+# Task5: zapis danych do pliku w formacie YAML
+def save_yaml(file_path, data):
+    with open(file_path, 'w') as file:
+        yaml.dump(data, file, default_flow_style=False)
