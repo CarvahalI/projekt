@@ -1,0 +1,11 @@
+# Task1: parsowanie argumentów przekazywanych przy uruchomieniu programu
+import sys
+
+def parse_arguments():
+    if len(sys.argv) < 3:
+        print("Usage: program.py input_file output_file")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+    return input_file, output_file
