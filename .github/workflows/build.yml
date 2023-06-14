@@ -1,0 +1,29 @@
+name: Budowanie pliku .exe
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"  # Uruchamianie automatycznie raz w tygodniu w niedzielę o północy
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout kodu
+        uses: actions/checkout@v2
+      
+      - name: Konfiguracja i instalacja potrzebnych komponentów
+        run: bash installResources.sh
+      
+      - name: Budowanie pliku .exe
+        run: pyinstaller --onefile program.py
+      
+      - name: Przesłanie pliku .exe do repozytorium
+        uses: actions/upload-artifact@v3
+        with:
+          name: program-exe
+          path: dist/program.exe
